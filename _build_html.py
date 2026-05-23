@@ -246,8 +246,31 @@ pre.hl .an{color:#d2a8ff}
 .pipe-t{font-weight:700;font-size:.71rem;line-height:1.2}
 .pipe-sub{font-size:.59rem;opacity:.6;margin-top:2px;line-height:1.2}
 .pipe-arr{color:var(--dim);font-size:1.1rem;padding:0 3px;flex-shrink:0;opacity:.7}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+#tp-studio.active{display:flex!important;flex-direction:column;overflow:hidden}
+#studio-layout{display:grid;grid-template-columns:2fr 1fr 1fr;flex:1;overflow:hidden;min-height:0}
+.studio-panel{display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;min-width:0}
+.studio-panel:last-child{border-right:none}
+.studio-hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 12px;font-size:.69rem;font-weight:700;display:flex;align-items:center;gap:8px;flex-shrink:0;text-transform:uppercase;letter-spacing:.07em;color:var(--dim)}
+.run-btn{background:linear-gradient(135deg,#3fb950,#238636);border:none;border-radius:4px;padding:3px 11px;color:#fff;cursor:pointer;font-size:.72rem;font-weight:700;box-shadow:0 2px 8px rgba(63,185,80,.4);transition:all .15s}
+.run-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(63,185,80,.6)}
+.stop-btn{background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:3px 8px;color:var(--dim);cursor:pointer;font-size:.72rem}
+#code-editor{flex:1;overflow-y:auto;padding:12px;font-family:'Cascadia Code','Consolas',monospace;font-size:.75rem;line-height:1.7;white-space:pre-wrap;background:#0d1117}
+#output-terminal{flex:1;overflow-y:auto;padding:12px;font-family:'Cascadia Code','Consolas',monospace;font-size:.75rem;line-height:1.6;background:#0d1117;color:#3fb950;white-space:pre-wrap;word-break:break-all}
+#trace-viz{flex:1;overflow-y:auto;padding:10px}
+.tv-step{margin-bottom:8px;opacity:0;transform:translateX(28px);transition:opacity .35s ease,transform .38s cubic-bezier(.17,.67,.35,1)}
+.tv-step.active,.tv-step.done{opacity:1;transform:translateX(0)}
+.tv-step-inner{background:linear-gradient(135deg,var(--bg3),#1c2128);border:1px solid var(--border);border-left:3px solid var(--bg4);border-radius:7px;padding:8px 10px;font-size:.73rem;font-family:'Cascadia Code','Consolas',monospace;box-shadow:0 3px 10px rgba(0,0,0,.4);transition:border-left-color .3s,box-shadow .3s,background .3s}
+.tv-step-inner.current{border-left-color:#58a6ff;background:linear-gradient(135deg,#162235,#1c2128);box-shadow:0 4px 20px rgba(88,166,255,.3),0 0 0 1px rgba(88,166,255,.12);animation:pulse-step 1.4s ease-in-out infinite}
+.tv-step.done .tv-step-inner{border-left-color:#3fb950;opacity:.5}
+.tv-step-n{font-size:.6rem;color:var(--dim);margin-bottom:3px}
+.tv-step-c{color:#e6edf3;word-break:break-all}
+.tv-mem{padding:12px 0 4px}
+.tv-mem-row{display:flex;align-items:center;gap:7px;font-size:.68rem;margin-bottom:7px}
+.tv-mem-label{color:var(--dim);width:52px;flex-shrink:0;text-align:right;font-size:.63rem}
+.tv-mem-bar{flex:1;height:8px;border-radius:4px;background:var(--bg4);overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.4)}
+.tv-mem-fill{height:100%;border-radius:4px;transition:width .7s cubic-bezier(.17,.67,.35,1);width:0;box-shadow:0 0 8px currentColor}
+.tv-mem-val{font-size:.63rem;color:var(--dim);min-width:30px;text-align:right}
+@keyframes pulse-step{0%,100%{box-shadow:0 4px 20px rgba(88,166,255,.3),0 0 0 1px rgba(88,166,255,.12)}50%{box-shadow:0 4px 30px rgba(88,166,255,.6),0 0 0 1px rgba(88,166,255,.3)}}
 </style>
 </head>
 <body>
@@ -291,12 +314,14 @@ pre.hl .an{color:#d2a8ff}
         <div class="tab"        onclick="showTab('code',this)">&#128187; Code</div>
         <div class="tab"        onclick="showTab('mem', this)">&#129504; Memory</div>
         <div class="tab"        onclick="showTab('flow',this)">&#9654; Flow</div>
+        <div class="tab"        onclick="showTab('studio',this);initStudio(curQ)">&#9881; Studio</div>
       </div>
       <div id="tc">
         <div id="tp-prob" class="tp active"></div>
         <div id="tp-code" class="tp"></div>
         <div id="tp-mem"  class="tp"></div>
         <div id="tp-flow" class="tp"></div>
+        <div id="tp-studio" class="tp"></div>
       </div>
     </div>
   </div>
@@ -540,6 +565,8 @@ function showTab(name,el){
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
   if(el)el.classList.add('active');
   document.getElementById('tp-'+name).classList.add('active');
+  const tc=document.getElementById('tc');
+  if(tc){tc.style.padding=name==='studio'?'0':'14px';tc.style.overflow=name==='studio'?'hidden':'auto';}
 }
 
 // ── Tabs ─────────────────────────────────────────────────────────────────────
@@ -680,6 +707,146 @@ function renderFlow(q){
     '<div class="fsec"><div class="fsec-h">&#9654; Algorithm Steps</div>'+sh+'</div>'+
     '<div class="fsec"><div class="fsec-h">&#128187; Code Execution Trace</div>'+th+'</div>'+
     '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Time: <span style="color:'+tcColor(q.tc)+'">'+esc(q.tc)+'</span> &nbsp;&#8226;&nbsp; Space: <span style="color:'+tcColor(q.sc)+'">'+esc(q.sc)+'</span></div>';
+}
+
+// ── Studio: Editor + Runner + Animated Trace ──────────────────────────────────
+let _runTimer=null,_runStep=0,_runTrace=[];
+
+function initStudio(q){
+  if(!q)return;
+  const tp=document.getElementById('tp-studio');
+  if(!tp)return;
+  stopCode();
+  tp.innerHTML=
+    '<div id="studio-layout">'+
+    '<div class="studio-panel">'+
+      '<div class="studio-hdr">'+
+        '<span style="color:var(--accent)">&#128187; Editor</span>'+
+        '<span style="flex:1"></span>'+
+        '<button class="run-btn" onclick="runCode()">&#9654; Run</button>'+
+        '<button class="stop-btn" onclick="stopCode()">&#9632;</button>'+
+      '</div>'+
+      '<div id="code-editor">'+hl(q.c,q.lang)+'</div>'+
+    '</div>'+
+    '<div class="studio-panel">'+
+      '<div class="studio-hdr"><span style="color:#3fb950">&#9655; Output</span></div>'+
+      '<div id="output-terminal"><span style="color:var(--dim);font-size:.71rem">$ click &#9654; Run...\\n</span></div>'+
+    '</div>'+
+    '<div class="studio-panel">'+
+      '<div class="studio-hdr">'+
+        '<span style="color:#d29922">&#9670; Trace</span>'+
+        '<span id="tv-status" style="font-size:.62rem;color:var(--dim);margin-left:6px"></span>'+
+      '</div>'+
+      '<div id="trace-viz"></div>'+
+    '</div>'+
+    '</div>';
+  _runTrace=q.trace||[];
+  buildTraceSlots(q);
+}
+
+function buildTraceSlots(q){
+  const tv=document.getElementById('trace-viz');if(!tv)return;
+  const m=(q||curQ||{}).mem||{};
+  window._tvStack=Math.min(88,15+(m.stack||[]).length*11);
+  window._tvHeap=Math.min(88,20+(m.heap||[]).length*13);
+  tv.innerHTML=(_runTrace.length?_runTrace.map(function(l,i){
+    return '<div class="tv-step" id="tvs-'+i+'">'+
+      '<div class="tv-step-inner" id="tvsi-'+i+'">'+
+      '<div class="tv-step-n">&#9656; step '+(i+1)+' / '+_runTrace.length+'</div>'+
+      '<div class="tv-step-c">'+esc(l)+'</div>'+
+      '</div></div>';
+  }).join(''):'<div style="color:var(--dim);padding:12px;font-size:.8rem">No trace for this question.</div>')+
+  '<div class="tv-mem">'+
+    '<div class="tv-mem-row"><span class="tv-mem-label">Stack</span>'+
+    '<div class="tv-mem-bar"><div class="tv-mem-fill" id="bar-stack" style="background:#58a6ff;color:#58a6ff"></div></div>'+
+    '<span class="tv-mem-val" id="val-stack">0%</span></div>'+
+    '<div class="tv-mem-row"><span class="tv-mem-label">Heap</span>'+
+    '<div class="tv-mem-bar"><div class="tv-mem-fill" id="bar-heap" style="background:#3fb950;color:#3fb950"></div></div>'+
+    '<span class="tv-mem-val" id="val-heap">0%</span></div>'+
+    '<div class="tv-mem-row"><span class="tv-mem-label">CPU</span>'+
+    '<div class="tv-mem-bar"><div class="tv-mem-fill" id="bar-cpu" style="background:#d29922;color:#d29922"></div></div>'+
+    '<span class="tv-mem-val" id="val-cpu">0%</span></div>'+
+  '</div>';
+}
+
+function setBar(id,pct){
+  const b=document.getElementById('bar-'+id);
+  const v=document.getElementById('val-'+id);
+  if(b)b.style.width=pct+'%';
+  if(v)v.textContent=pct+'%';
+}
+
+function runCode(){
+  if(!curQ)return;
+  stopCode();_runStep=0;
+  for(let i=0;i<_runTrace.length;i++){
+    const s=document.getElementById('tvs-'+i),si=document.getElementById('tvsi-'+i);
+    if(s)s.classList.remove('active','done');
+    if(si)si.classList.remove('current');
+  }
+  setBar('stack',0);setBar('heap',0);setBar('cpu',0);
+  const st=document.getElementById('tv-status');
+  if(st)st.textContent='running\\u2026';
+  const ot=document.getElementById('output-terminal');
+  if(ot){
+    ot.innerHTML='<span style="color:#58a6ff;font-size:.68rem">$ run '+esc((curQ.id||'').replace(/-/g,'_'))+'</span>\\n';
+    typeOutput(curQ.out||'(no output)',ot,animateTrace);
+  } else animateTrace();
+}
+
+function typeOutput(text,el,done){
+  const chars=Array.from(String(text||''));
+  let i=0;
+  const spd=chars.length>80?10:chars.length>30?18:32;
+  (function next(){
+    if(i>=chars.length){
+      el.innerHTML+='<span style="color:#3fb950">\\n[Process finished with exit code 0]</span>';
+      el.scrollTop=el.scrollHeight;
+      _runTimer=setTimeout(done||function(){},400);
+      return;
+    }
+    el.innerHTML+=esc(chars[i++]);
+    el.scrollTop=el.scrollHeight;
+    _runTimer=setTimeout(next,spd);
+  })();
+}
+
+function animateTrace(){
+  _runStep=0;
+  const total=_runTrace.length;
+  const st=document.getElementById('tv-status');
+  (function step(){
+    if(_runStep>0){
+      const pi=document.getElementById('tvsi-'+(_runStep-1));
+      if(pi)pi.classList.remove('current');
+      const ps=document.getElementById('tvs-'+(_runStep-1));
+      if(ps){ps.classList.remove('active');ps.classList.add('done');}
+    }
+    if(_runStep>=total){
+      if(st)st.textContent='done \\u2714';
+      setBar('stack',window._tvStack||30);
+      setBar('heap',window._tvHeap||40);
+      setBar('cpu',3);
+      return;
+    }
+    const el=document.getElementById('tvs-'+_runStep);
+    const inner=document.getElementById('tvsi-'+_runStep);
+    if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'nearest'});},50);}
+    if(inner)inner.classList.add('current');
+    if(st)st.textContent='step '+(_runStep+1)+'/'+total;
+    const prog=(_runStep+1)/total;
+    setBar('stack',Math.round((window._tvStack||30)*Math.min(1,prog*1.3)));
+    setBar('heap',Math.round((window._tvHeap||40)*Math.min(1,prog*1.1)));
+    setBar('cpu',Math.round(20+Math.random()*65));
+    _runStep++;
+    _runTimer=setTimeout(step,720);
+  })();
+}
+
+function stopCode(){
+  if(_runTimer){clearTimeout(_runTimer);_runTimer=null;}
+  const st=document.getElementById('tv-status');
+  if(st&&st.textContent.indexOf('running')!==-1)st.textContent='stopped';
 }
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
