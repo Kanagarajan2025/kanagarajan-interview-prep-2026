@@ -72,15 +72,24 @@ def extract_steps(explanation, code):
         parts = re.split(r';\s*|(?<=[a-z\)])\.\s+(?=[A-Z])', explanation)
         steps = [p.strip()[:130] for p in parts if len(p.strip()) > 15][:7]
     trace = []
-    for line in code.split('\n'):
-        s = line.strip()
-        if not s or s.startswith('//') or s.startswith('/*') or s.startswith('*'): continue
-        if (s.startswith('return ') or
-                re.match(r'(int|long|boolean|String|char|double|var)\s+\w+\s*=', s) or
-                s.startswith('for ') or s.startswith('while ') or
-                s.startswith('if (') or s.startswith('System.out')):
-            trace.append(s[:90])
-        if len(trace) == 8: break
+    is_sql = bool(re.search(r'\b(SELECT|INSERT|UPDATE|DELETE|CREATE)\b', code, re.I))
+    if is_sql:
+        for clause in ['SELECT', 'FROM', 'JOIN', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'WITH']:
+            for line in code.split('\n'):
+                s = line.strip()
+                if re.match(r'(?i)' + re.escape(clause) + r'\b', s):
+                    trace.append(s[:90]); break
+    else:
+        for line in code.split('\n'):
+            s = line.strip()
+            if not s or s.startswith('//') or s.startswith('/*') or s.startswith('*'): continue
+            if (s.startswith('return ') or
+                    re.match(r'(int|long|boolean|String|char|double|float|List|Map|Set|var)\s+\w+\s*[=;]', s) or
+                    s.startswith('for ') or s.startswith('while ') or
+                    s.startswith('if (') or s.startswith('if(') or
+                    s.startswith('System.out') or s.startswith('throw ')):
+                trace.append(s[:90])
+            if len(trace) == 12: break
     return steps, trace
 
 # ── Parser ────────────────────────────────────────────────────────────────────
@@ -184,7 +193,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .tp.active{display:block}
 .flbl{font-size:.67rem;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:3px;margin-top:10px}
 .flbl:first-child{margin-top:0}
-.fbox{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:9px 12px;font-size:.84rem;line-height:1.6}
+.fbox{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:9px 12px;font-size:.84rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
 .io{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .cpill{padding:5px 14px;border-radius:7px;font-size:.8rem;font-weight:600;display:inline-block;margin-right:8px;margin-top:6px}
 .tc-pill{background:#3fb95018;border:1px solid #3fb95044;color:#3fb950}
@@ -193,6 +202,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .code-lang{position:absolute;top:6px;left:10px;font-size:.63rem;text-transform:uppercase;color:var(--dim);letter-spacing:.06em;pointer-events:none}
 .copy-btn{position:absolute;top:5px;right:8px;background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:3px 9px;font-size:.7rem;color:var(--dim);cursor:pointer}
 .copy-btn:hover{color:var(--text)}
+.nav-btn{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:4px 10px;color:var(--dim);cursor:pointer;font-size:.82rem;flex-shrink:0}
+.nav-btn:hover{color:var(--text);background:var(--bg4)}
 pre.hl{background:#0d1117;padding:28px 14px 14px;overflow-x:auto;font-family:'Cascadia Code','Consolas','Courier New',monospace;font-size:.78rem;line-height:1.65;white-space:pre;margin:0;color:#e6edf3}
 pre.hl .k{color:#ff7b72}
 pre.hl .s{color:#a5d6ff}
@@ -257,11 +268,14 @@ pre.hl .an{color:#d2a8ff}
     <div id="dv">
       <div id="dv-hdr">
         <button id="back" onclick="showList()">&#8592; Back</button>
+        <button class="nav-btn" onclick="navQ(-1)">&#8249; Prev</button>
         <h2 id="dv-title"></h2>
+        <span id="dv-nav" style="font-size:.68rem;color:var(--dim);white-space:nowrap"></span>
         <span id="dv-id" class="qid"></span>
         <span id="dv-cat" class="bcat"></span>
         <span id="dv-tc" class="btc"></span>
         <span id="dv-sc" class="bsc"></span>
+        <button class="nav-btn" onclick="navQ(1)">Next &#8250;</button>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="showTab('prob',this)">&#128196; Problem</div>
@@ -353,7 +367,7 @@ function hlSQL(raw){
   let s=eh(raw);
   s=s.replace(/(--[^\\n]*)/g,'<span class="c">$1</span>');
   s=s.replace(/('(?:[^'\\\\]|\\\\.)*')/g,'<span class="s">$1</span>');
-  s=s.replace(/\\b([A-Za-z_][A-Za-z_]*)\\b/g,(m)=>SKW.has(m.toUpperCase())?'<span class="k">'+m+'</span>':m);
+  s=s.replace(/\\b([A-Za-z_][A-Za-z_0-9]*)\\b/g,(m)=>SKW.has(m.toUpperCase())?'<span class="k">'+m+'</span>':m);
   s=s.replace(/\\b(\\d+)\\b/g,'<span class="n">$1</span>');
   return s;
 }
@@ -404,7 +418,7 @@ function hl(code,lang){
 }
 
 // ── State ────────────────────────────────────────────────────────────────────
-let filtered=QS.slice(), curCat='ALL', curQ=null;
+let filtered=QS.slice(), curCat='ALL', curQ=null, curIdx=-1;
 const PAGE=25, CARD_H=85;
 let startIdx=0;
 
@@ -490,8 +504,8 @@ function showList(){
   document.getElementById('dv').style.display='none';
 }
 
-function showDetail(q){
-  curQ=q;
+function showDetail(q,idx){
+  curQ=q;curIdx=idx!=null?idx:filtered.indexOf(q);
   document.getElementById('lv').style.display='none';
   document.getElementById('dv').style.display='flex';
   document.getElementById('dv-title').textContent='Q'+q.n+'. '+q.t;
@@ -500,8 +514,16 @@ function showDetail(q){
   dc.textContent=q.cat;dc.style.cssText='background:'+q.col+'28;border:1px solid '+q.col+'55;color:'+q.col;
   document.getElementById('dv-tc').textContent='Time: '+q.tc;
   document.getElementById('dv-sc').textContent='Space: '+q.sc;
+  const dv=document.getElementById('dv-nav');if(dv)dv.textContent=curIdx>=0?(curIdx+1)+' / '+filtered.length:'';
   renderProb(q);renderCode(q);renderMem(q);renderFlow(q);
   showTab('prob',document.querySelector('.tab'));
+  document.getElementById('tc').scrollTop=0;
+}
+
+function navQ(dir){
+  if(!filtered.length)return;
+  const ni=Math.max(0,Math.min(filtered.length-1,(curIdx<0?0:curIdx)+dir));
+  showDetail(filtered[ni],ni);
 }
 
 function showTab(name,el){
@@ -551,6 +573,24 @@ function fallbackCopy(cb){
 
 function renderMem(q){
   const m=q.mem||{};
+  if(q.lang==='sql'){
+    const hr=(m.heap||[]).map(h=>'<div class="me"><span>'+esc(h)+'</span><span class="me-type">DB zone</span></div>').join('')||'<div class="me" style="color:var(--dim)">Result Set, Join Buffer</div>';
+    const str=(m.static||[]).map(s=>'<div class="me"><span>'+esc(s)+'</span><span class="me-type">catalog</span></div>').join('')||'<div class="me" style="color:var(--dim)">Table metadata, indexes</div>';
+    document.getElementById('tp-mem').innerHTML=
+      '<div class="mem-note">'+esc(m.note||'SQL executes in DB engine; no JVM stack/heap.')+'</div>'+
+      '<div class="jmm">'+
+      '<div class="jz jz-sk"><div class="jz-t">Buffer Pool</div><div class="jz-d">Table &amp; index pages cached in RAM.</div></div>'+
+      '<div class="jz jz-hp"><div class="jz-t">Sort Buffer</div><div class="jz-d">ORDER BY / GROUP BY temp workspace.</div></div>'+
+      '<div class="jz jz-ma"><div class="jz-t">Result Set</div><div class="jz-d">Rows returned to the client cursor.</div></div>'+
+      '<div class="jz jz-pc"><div class="jz-t">Query Plan</div><div class="jz-d">Optimizer execution plan (cached).</div></div>'+
+      '</div>'+
+      '<div class="mgrid">'+
+      '<div class="mbox hp"><div class="mbox-h">&#128308; Working Memory</div>'+hr+'</div>'+
+      '<div class="mbox sta"><div class="mbox-h">&#9660; System Catalog</div>'+str+'</div>'+
+      '</div>'+
+      '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Space: <span style="color:#58a6ff">'+esc(q.sc)+'</span> &#8212; DB allocates temp tables &amp; sort buffers proportional to result set size.</div>';
+    return;
+  }
   const sr=(m.stack||[]).map(v=>'<div class="me"><span>'+esc(v.name)+'</span><span class="me-type">'+esc(v.type)+'</span></div>').join('')||'<div class="me" style="color:var(--dim)">No locals detected</div>';
   const hr=(m.heap||[]).map(h=>'<div class="me"><span>'+esc(h)+'</span><span class="me-type">heap</span></div>').join('')||'<div class="me" style="color:var(--dim)">No heap allocs</div>';
   const str=(m.static||[]).map(s=>'<div class="me"><span>'+esc(s)+'</span><span class="me-type">static</span></div>').join('')||'<div class="me" style="color:var(--dim)">None</div>';
@@ -579,8 +619,25 @@ function renderMem(q){
 
 function renderFlow(q){
   const steps=q.steps||[], trace=q.trace||[];
-  const sh=steps.length?steps.map((s,i)=>(i>0?'<div class="arr">&#8595;</div>':'')+'<div class="step"><div class="step-n">'+(i+1)+'</div><div class="step-t">'+esc(s)+'</div></div>').join(''):'<div style="color:var(--dim);font-size:.8rem">Steps extracted from explanation.</div>';
-  const th=trace.length?trace.map((l,i)=>'<div class="tr"><div class="tr-n">'+(i+1)+'</div><div class="tr-c">'+esc(l)+'</div></div>').join(''):'<div style="color:var(--dim);font-size:.8rem">Key code statements.</div>';
+  if(q.lang==='sql'){
+    const SQL_ORDER=['FROM / JOIN &#8212; load &amp; join source tables','WHERE &#8212; filter individual rows','GROUP BY &#8212; aggregate rows into groups','HAVING &#8212; filter aggregated groups','SELECT &#8212; project &amp; compute output columns','DISTINCT &#8212; remove duplicate rows','ORDER BY &#8212; sort the result set','LIMIT / OFFSET &#8212; paginate output'];
+    const sqlSteps=SQL_ORDER.map((s,i)=>(i>0?'<div class="arr">&#8595;</div>':'')+
+      '<div class="step"><div class="step-n">'+(i+1)+'</div><div class="step-t">'+s+'</div></div>').join('');
+    const th=trace.length?trace.map((l,i)=>'<div class="tr"><div class="tr-n">'+(i+1)+'</div><div class="tr-c">'+esc(l)+'</div></div>').join(''):
+      '<div style="color:var(--dim);font-size:.8rem">Key SQL clauses from the query above.</div>';
+    const extra=steps.length?'<div class="fsec"><div class="fsec-h">&#128218; Explanation Notes</div>'+
+      steps.map((s,i)=>'<div class="step"><div class="step-n">'+(i+1)+'</div><div class="step-t">'+esc(s)+'</div></div>').join('')+'</div>':'';
+    document.getElementById('tp-flow').innerHTML=
+      '<div class="fsec"><div class="fsec-h">&#128204; SQL Logical Execution Order</div>'+sqlSteps+'</div>'+extra+
+      '<div class="fsec"><div class="fsec-h">&#128187; Query Clauses Trace</div>'+th+'</div>'+
+      '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Time complexity: <span style="color:#3fb950">'+esc(q.tc)+'</span> &#8212; typically O(n log n) for sort, O(n) for full scan.</div>';
+    return;
+  }
+  const sh=steps.length?steps.map((s,i)=>(i>0?'<div class="arr">&#8595;</div>':'')+
+    '<div class="step"><div class="step-n">'+(i+1)+'</div><div class="step-t">'+esc(s)+'</div></div>').join(''):
+    '<div style="color:var(--dim);font-size:.8rem">Steps extracted from explanation.</div>';
+  const th=trace.length?trace.map((l,i)=>'<div class="tr"><div class="tr-n">'+(i+1)+'</div><div class="tr-c">'+esc(l)+'</div></div>').join(''):
+    '<div style="color:var(--dim);font-size:.8rem">Key code statements.</div>';
   document.getElementById('tp-flow').innerHTML=
     '<div class="fsec"><div class="fsec-h">&#128218; Algorithm Steps (from explanation)</div>'+sh+'</div>'+
     '<div class="fsec"><div class="fsec-h">&#128187; Code Execution Trace</div>'+th+'</div>'+
@@ -591,6 +648,11 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 applyFilter();
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&curQ){showList();}
+  else if(e.key==='ArrowRight'&&curQ){navQ(1);}
+  else if(e.key==='ArrowLeft'&&curQ){navQ(-1);}
+});
 </script>
 </body>
 </html>"""
