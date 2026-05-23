@@ -29,8 +29,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .ci-cnt{font-size:.67rem;color:var(--dim);background:var(--bg4);border-radius:8px;padding:1px 6px;flex-shrink:0}
 #main{flex:1;overflow:hidden;display:flex;flex-direction:column}
 #lv{flex:1;overflow-y:auto;padding:8px}
-.qc{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:10px 13px;margin-bottom:7px;cursor:pointer}
-.qc:hover{border-color:var(--accent)}
+.qc{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:10px 13px;margin-bottom:7px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.qc:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .qc-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .qnum{font-size:.7rem;color:var(--dim);min-width:30px;font-family:monospace}
 .qtitle{font-size:.87rem;font-weight:600;flex:1}
@@ -71,33 +71,42 @@ pre.hl .s{color:#a5d6ff}
 pre.hl .c{color:#8b949e;font-style:italic}
 pre.hl .n{color:#79c0ff}
 pre.hl .an{color:#d2a8ff}
-.jmm{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.jz{border-radius:6px;padding:8px;text-align:center;font-size:.74rem}
-.jz-t{font-weight:700;margin-bottom:3px}
-.jz-d{font-size:.66rem;color:var(--dim);line-height:1.4}
-.jz-sk{background:#58a6ff18;border:1px solid #58a6ff44;color:#58a6ff}
-.jz-hp{background:#3fb95018;border:1px solid #3fb95044;color:#3fb950}
-.jz-ma{background:#d2a8ff18;border:1px solid #d2a8ff44;color:#d2a8ff}
-.jz-pc{background:#d2992218;border:1px solid #d2992244;color:#d29922}
+.jmm{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.jz{border-radius:10px;padding:11px 8px;text-align:center;font-size:.74rem;box-shadow:0 4px 16px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .2s,box-shadow .2s;cursor:default}
+.jz:hover{transform:translateY(-5px) scale(1.04);box-shadow:0 12px 30px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.1)}
+.jz-t{font-weight:700;margin-bottom:4px;font-size:.76rem;letter-spacing:.02em}
+.jz-d{font-size:.63rem;color:var(--dim);line-height:1.45;opacity:.85}
+.jz-sk{background:linear-gradient(135deg,#58a6ff22 0%,#58a6ff08 100%);border:1px solid #58a6ff55;color:#58a6ff}
+.jz-hp{background:linear-gradient(135deg,#3fb95022 0%,#3fb95008 100%);border:1px solid #3fb95055;color:#3fb950}
+.jz-ma{background:linear-gradient(135deg,#d2a8ff22 0%,#d2a8ff08 100%);border:1px solid #d2a8ff55;color:#d2a8ff}
+.jz-pc{background:linear-gradient(135deg,#d2992222 0%,#d2992208 100%);border:1px solid #d2992255;color:#d29922}
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
-.mbox{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px}
-.mbox-h{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.mbox{background:linear-gradient(160deg,var(--bg3) 0%,#1a1f27 100%);border:1px solid var(--border);border-radius:8px;padding:11px;box-shadow:0 4px 15px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04)}
+.mbox-h{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .stk .mbox-h{color:#58a6ff}
 .hp .mbox-h{color:#3fb950}
 .sta .mbox-h{color:#d2a8ff}
-.me{background:var(--bg4);border-radius:3px;padding:3px 7px;margin-bottom:3px;font-size:.74rem;font-family:monospace;display:flex;justify-content:space-between;gap:6px}
+.me{background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:4px 8px;margin-bottom:4px;font-size:.74rem;font-family:monospace;display:flex;justify-content:space-between;gap:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
 .me-type{color:var(--dim);font-size:.67rem}
 .rec-badge{background:#f8514918;border:1px solid #f8514944;color:#f85149;border-radius:4px;padding:3px 8px;font-size:.71rem;text-align:center;margin-top:6px}
 .mem-note{font-size:.74rem;color:var(--dim);margin-bottom:8px;padding:7px 10px;background:var(--bg3);border-radius:5px;border:1px solid var(--border)}
 .fsec{margin-bottom:18px}
-.fsec-h{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
-.step{display:flex;gap:10px;margin-bottom:8px}
-.step-n{background:var(--accent);color:#000;border-radius:50%;width:20px;height:20px;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.step-t{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 11px;font-size:.8rem;flex:1;line-height:1.5}
-.arr{color:var(--dim);font-size:.75rem;margin-left:30px;margin-bottom:3px}
-.tr{display:flex;gap:10px;margin-bottom:6px}
-.tr-n{background:#3fb95018;color:#3fb950;border:1px solid #3fb95044;border-radius:50%;width:20px;height:20px;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.tr-c{background:var(--bg3);border:1px solid #3fb95022;border-radius:4px;padding:4px 9px;font-size:.75rem;font-family:monospace;flex:1;white-space:pre-wrap;word-break:break-all}
+.fsec-h{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #58a6ff33;text-shadow:0 0 20px rgba(88,166,255,.25)}
+.step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
+.step-n{background:linear-gradient(135deg,#79c0ff,#1f6feb);color:#fff;border-radius:50%;width:24px;height:24px;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;box-shadow:0 2px 8px rgba(88,166,255,.5),0 0 0 2px rgba(88,166,255,.15)}
+.step-t{background:linear-gradient(135deg,var(--bg3) 0%,#1c2128 100%);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:6px;padding:9px 13px;font-size:.8rem;flex:1;line-height:1.5;box-shadow:0 3px 10px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04)}
+.arr{color:var(--accent);font-size:.85rem;margin-left:11px;margin-bottom:2px;opacity:.5;text-align:left}
+.tr{display:flex;gap:10px;margin-bottom:6px;align-items:flex-start}
+.tr-n{background:linear-gradient(135deg,#56d364,#238636);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;box-shadow:0 2px 8px rgba(63,185,80,.45),0 0 0 2px rgba(63,185,80,.15)}
+.tr-c{background:#0d1117;border:1px solid #3fb95033;border-left:3px solid #3fb950;border-radius:5px;padding:6px 10px;font-size:.76rem;font-family:'Cascadia Code','Consolas',monospace;flex:1;white-space:pre-wrap;word-break:break-all;box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(63,185,80,.06)}
+.pipeline{display:flex;align-items:center;overflow-x:auto;padding:8px 2px 14px;margin-bottom:12px;gap:0;scrollbar-width:thin}
+.pipe-step{display:flex;align-items:center;flex-shrink:0}
+.pipe-chip{padding:7px 10px;border-radius:7px;text-align:center;min-width:80px;max-width:110px;box-shadow:0 3px 12px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07);transition:transform .15s,box-shadow .15s;cursor:default}
+.pipe-chip:hover{transform:translateY(-4px);box-shadow:0 8px 22px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+.pipe-n{font-size:.59rem;margin-bottom:2px;opacity:.65;font-family:monospace}
+.pipe-t{font-weight:700;font-size:.71rem;line-height:1.2}
+.pipe-sub{font-size:.59rem;opacity:.6;margin-top:2px;line-height:1.2}
+.pipe-arr{color:var(--dim);font-size:1.1rem;padding:0 3px;flex-shrink:0;opacity:.7}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 </style>
@@ -338,7 +347,7 @@ function renderCards(){
   const frag=document.createDocumentFragment();
   for(let i=startIdx;i<end;i++){
     const q=filtered[i], d=document.createElement('div');
-    d.className='qc';d.onclick=()=>showDetail(q);
+    d.className='qc';d.style.borderLeft='3px solid '+q.col+'88';d.onclick=()=>showDetail(q,i);
     d.innerHTML='<div class="qc-top">'+
       '<span class="qnum">#'+q.n+'</span>'+
       '<span class="qtitle">'+esc(q.t)+'</span>'+
@@ -478,9 +487,37 @@ function renderMem(q){
     '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Space: '+scd+' Primitives live on stack; reference types have stack pointer + heap object.</div>';
 }
 
+function tcColor(tc){
+  const t=String(tc||'');
+  if(t==='O(1)'||t.indexOf('constant')!==-1)return '#3fb950';
+  if(t.indexOf('n log')!==-1||t.indexOf('n·log')!==-1)return '#ff9800';
+  if(t.indexOf('log n')!==-1||t.indexOf('log N')!==-1)return '#58a6ff';
+  if(t==='O(n)'||t==='O(N)')return '#ffc107';
+  if(t.indexOf('n²')!==-1||t.indexOf('n^2')!==-1||t.indexOf('n*n')!==-1)return '#f85149';
+  if(t.indexOf('2^n')!==-1||t.indexOf('exponential')!==-1||t.indexOf('n!')!==-1)return '#d2a8ff';
+  return '#d29922';
+}
 function renderFlow(q){
   const steps=q.steps||[], trace=q.trace||[];
   if(q.lang==='sql'){
+    const SQL_PIPE=[
+      {n:'01',t:'FROM',sub:'JOIN sources',col:'#00bcd4'},
+      {n:'02',t:'WHERE',sub:'filter rows',col:'#2196f3'},
+      {n:'03',t:'GROUP BY',sub:'aggregate',col:'#9c27b0'},
+      {n:'04',t:'HAVING',sub:'filter groups',col:'#ff9800'},
+      {n:'05',t:'SELECT',sub:'project cols',col:'#4caf50'},
+      {n:'06',t:'DISTINCT',sub:'deduplicate',col:'#00e5ff'},
+      {n:'07',t:'ORDER BY',sub:'sort rows',col:'#ffc107'},
+      {n:'08',t:'LIMIT',sub:'paginate',col:'#f44336'}
+    ];
+    const pipeHtml='<div class="pipeline">'+SQL_PIPE.map(function(p,i){
+      return '<div class="pipe-step">'+(i>0?'<span class="pipe-arr">&#8250;</span>':'')+
+        '<div class="pipe-chip" style="background:linear-gradient(135deg,'+p.col+'28,'+p.col+'08);border:1px solid '+p.col+'55;color:'+p.col+'">'+
+        '<div class="pipe-n">phase '+p.n+'</div>'+
+        '<div class="pipe-t">'+p.t+'</div>'+
+        '<div class="pipe-sub">'+p.sub+'</div>'+
+        '</div></div>';
+    }).join('')+'</div>';
     const SQL_ORDER=['FROM / JOIN &#8212; load &amp; join source tables','WHERE &#8212; filter individual rows','GROUP BY &#8212; aggregate rows into groups','HAVING &#8212; filter aggregated groups','SELECT &#8212; project &amp; compute output columns','DISTINCT &#8212; remove duplicate rows','ORDER BY &#8212; sort the result set','LIMIT / OFFSET &#8212; paginate output'];
     const sqlSteps=SQL_ORDER.map((s,i)=>(i>0?'<div class="arr">&#8595;</div>':'')+
       '<div class="step"><div class="step-n">'+(i+1)+'</div><div class="step-t">'+s+'</div></div>').join('');
@@ -489,9 +526,10 @@ function renderFlow(q){
     const extra=steps.length?'<div class="fsec"><div class="fsec-h">&#128218; Explanation Notes</div>'+
       steps.map((s,i)=>'<div class="step"><div class="step-n">'+(i+1)+'</div><div class="step-t">'+esc(s)+'</div></div>').join('')+'</div>':'';
     document.getElementById('tp-flow').innerHTML=
-      '<div class="fsec"><div class="fsec-h">&#128204; SQL Logical Execution Order</div>'+sqlSteps+'</div>'+extra+
+      '<div class="fsec"><div class="fsec-h">&#128200; SQL Execution Pipeline</div>'+pipeHtml+'</div>'+
+      '<div class="fsec"><div class="fsec-h">&#128204; Logical Execution Order</div>'+sqlSteps+'</div>'+extra+
       '<div class="fsec"><div class="fsec-h">&#128187; Query Clauses Trace</div>'+th+'</div>'+
-      '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Time complexity: <span style="color:#3fb950">'+esc(q.tc)+'</span> &#8212; typically O(n log n) for sort, O(n) for full scan.</div>';
+      '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Time: <span style="color:'+tcColor(q.tc)+'">'+esc(q.tc)+'</span> &nbsp;&#8226;&nbsp; Space: <span style="color:'+tcColor(q.sc)+'">'+esc(q.sc)+'</span></div>';
     return;
   }
   const sh=steps.length?steps.map((s,i)=>(i>0?'<div class="arr">&#8595;</div>':'')+
@@ -500,9 +538,9 @@ function renderFlow(q){
   const th=trace.length?trace.map((l,i)=>'<div class="tr"><div class="tr-n">'+(i+1)+'</div><div class="tr-c">'+esc(l)+'</div></div>').join(''):
     '<div style="color:var(--dim);font-size:.8rem">Key code statements.</div>';
   document.getElementById('tp-flow').innerHTML=
-    '<div class="fsec"><div class="fsec-h">&#128218; Algorithm Steps (from explanation)</div>'+sh+'</div>'+
+    '<div class="fsec"><div class="fsec-h">&#9654; Algorithm Steps</div>'+sh+'</div>'+
     '<div class="fsec"><div class="fsec-h">&#128187; Code Execution Trace</div>'+th+'</div>'+
-    '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Time complexity: <span style="color:#3fb950">'+esc(q.tc)+'</span> &#8212; total iterations across all steps.</div>';
+    '<div class="fbox" style="font-size:.77rem;color:var(--dim)">Time: <span style="color:'+tcColor(q.tc)+'">'+esc(q.tc)+'</span> &nbsp;&#8226;&nbsp; Space: <span style="color:'+tcColor(q.sc)+'">'+esc(q.sc)+'</span></div>';
 }
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
