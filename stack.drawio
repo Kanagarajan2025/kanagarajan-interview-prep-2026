@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="WD6BwsvL45l1rAT9ro-7" name="Page-1">
+    <mxGraphModel dx="1030" dy="623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="UiHL4RLuA0xIYGF9JlXi-0" />
+        <mxCell id="UiHL4RLuA0xIYGF9JlXi-1" parent="UiHL4RLuA0xIYGF9JlXi-0" />
+        <mxCell id="WvLakfevZOY3dUuTFnEk-0" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;what is generics ?&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="210" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-1" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Generics is a feature in java that lets you write a class,method or interface using a placeholder type . so it can work with any data type you choose at the time of use . while the compiler ensures type safety&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="830" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-2" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;what is Synchronized ?&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="250" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-3" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Synchronized is a java keyword that puts lock on a method or block so that only one thread can enter it at a time . other thread wait until the lock is released . Synchronized is one way to achieve atomicity&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="830" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-4" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;what is Atomicity ?&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="210" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-5" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Atomicity in java is a concept that ensures an operation completes fully as one indivisible unit . either all steps happen, or none of them happen . no thread can interrupt it in the middle .&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="830" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-6" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;what is Stack ?&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="210" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-7" parent="UiHL4RLuA0xIYGF9JlXi-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;Stack class in java represents a last in first out (LIFO) stack of objects . it extends class vector with five operations that allow a vector to be treated as a stack . it is thread-safe as all methods are synchronized&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;push -&amp;nbsp; Add items to the top&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;pop - Removes and return top item&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;peek - Returns top item without removing&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;empty - Returns true if stack is empty&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;search - Returns position of object from top&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="260" width="830" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-8" parent="UiHL4RLuA0xIYGF9JlXi-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Stack&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="90" x="200" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-9" parent="UiHL4RLuA0xIYGF9JlXi-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Vector&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="90" x="450" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-10" edge="1" parent="UiHL4RLuA0xIYGF9JlXi-1" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;" value="Extends">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <mxPoint x="290" y="649.5" as="sourcePoint" />
+            <mxPoint x="450" y="649.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-11" parent="UiHL4RLuA0xIYGF9JlXi-1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="push(obj)" vertex="1">
+          <mxGeometry height="60" width="140" x="175" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-12" parent="WvLakfevZOY3dUuTFnEk-11" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="addElement(obj)" vertex="1">
+          <mxGeometry height="30" width="140" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-13" edge="1" parent="UiHL4RLuA0xIYGF9JlXi-1" source="WvLakfevZOY3dUuTFnEk-8" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="WvLakfevZOY3dUuTFnEk-11" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="330" y="610" as="sourcePoint" />
+            <mxPoint x="380" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-14" parent="UiHL4RLuA0xIYGF9JlXi-1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="List" vertex="1">
+          <mxGeometry height="120" width="140" x="425" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-15" parent="WvLakfevZOY3dUuTFnEk-14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="Item 1" vertex="1">
+          <mxGeometry height="30" width="140" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-16" parent="WvLakfevZOY3dUuTFnEk-14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="Item 2" vertex="1">
+          <mxGeometry height="30" width="140" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WvLakfevZOY3dUuTFnEk-17" parent="WvLakfevZOY3dUuTFnEk-14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="Item 3" vertex="1">
+          <mxGeometry height="30" width="140" y="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
